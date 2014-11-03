@@ -1,6 +1,7 @@
 /**
  * Created by Werner on 9/10/2014.
  */
+
 import java.awt.*;
 import java.io.*;
 import java.net.*;
@@ -12,7 +13,8 @@ import java.util.concurrent.TimeUnit;
 
 public class Ruteador {
     public static InetAddress address = null;
-    public static int PORT = 5555; //default port
+    public static int FORWARD_PORT = 1981; //default port
+    public static int UPDATE_PORT = 9080; //default port
     public static RuteadorWindow ruteadorWindow;
 
     public static void main(String[] args) throws IOException {
@@ -61,43 +63,6 @@ public class Ruteador {
                     ruteadorWindow = new RuteadorWindow(address.getHostName());
                 }
             });
-
-            // Start server thread
-            (new Thread() {
-                public void run() {
-                    int corePoolSize = 5;
-                    int maxPoolSize = 10; // accept 10 clients max by default
-                    long keepAliveTime = 5000;
-
-                    // iniciar servidor
-                    ExecutorService threadPoolExecutor =
-                            new ThreadPoolExecutor(
-                                    corePoolSize,
-                                    maxPoolSize,
-                                    keepAliveTime,
-                                    TimeUnit.MILLISECONDS,
-                                    new LinkedBlockingQueue<Runnable>()
-                            );
-
-                    try {
-                        DatagramSocket serverSocket = new DatagramSocket(PORT, InetAddress.getByName(address.getHostAddress()));
-                        byte[] receiveData = new byte[1024];
-                        while (true) {
-                            DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-                            serverSocket.receive(receivePacket);
-                            String packet = new String(receivePacket.getData()).trim();
-                            InetAddress sender = receivePacket.getAddress();
-                            Forwarder forwarder = new Forwarder(sender, packet);
-                            //create new thread using a thread pool
-                            threadPoolExecutor.execute(forwarder);
-                        }
-                    } catch (Exception e) {
-                        threadPoolExecutor.shutdown();
-                        System.err.println("Server error: " + e);
-                    }
-                }
-            }).start();
-
 
         } else {
             System.out.println("Uso: java Ruteador -i [interface]");

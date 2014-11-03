@@ -1,5 +1,3 @@
-package services.update.protocol;
-
 import java.util.ArrayList;
 
 public class DistanceVectorMessage {

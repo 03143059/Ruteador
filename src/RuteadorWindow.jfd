@@ -36,7 +36,7 @@ new FormModel {
 						add( new FormComponent( "javax.swing.JMenuItem" ) {
 							name: "menuItem4"
 							"text": "text"
-							"action": new FormReference( "actionStart" )
+							"action": new FormReference( "actionStartRouter" )
 						} )
 						add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
 							name: "separator1"
@@ -62,7 +62,12 @@ new FormModel {
 					"floatable": false
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "button2"
-						"action": new FormReference( "actionStart" )
+						"action": new FormReference( "actionStartRouter" )
+						"mnemonic": 73
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "button8"
+						"action": new FormReference( "actionStartForwarder" )
 						"mnemonic": 73
 					} )
 					add( new FormComponent( "javax.swing.JButton" ) {
@@ -293,7 +298,7 @@ new FormModel {
 			"$action.LongDescription": "Salir el programa"
 			"$action.AcceleratorKey": static javax.swing.KeyStroke getKeyStroke( 115, 520, false )
 			"$action.ActionCommandKey": "Salir"
-			"$action.SmallIcon": new com.jformdesigner.model.SwingIcon( 0, "/exclamation.png" )
+			"$action.SmallIcon": new com.jformdesigner.model.SwingIcon( 0, "/images/exclamation.png" )
 			auxiliary() {
 				"JavaCodeGenerator.className": "Salir"
 			}
@@ -305,7 +310,7 @@ new FormModel {
 			"$action.Name": "Tabla de Ruteo"
 			"$action.ShortDescription": "Mostrar Tabla de Ruteo"
 			"$action.LongDescription": "Mostrar Tabla de Ruteo"
-			"$action.SmallIcon": new com.jformdesigner.model.SwingIcon( 0, "/table.png" )
+			"$action.SmallIcon": new com.jformdesigner.model.SwingIcon( 0, "/images/table.png" )
 			"$action.ActionCommandKey": "RouteTable"
 			auxiliary() {
 				"JavaCodeGenerator.className": "ShowRouteTable"
@@ -318,7 +323,7 @@ new FormModel {
 			"$action.Name": "Acerca de..."
 			"$action.ShortDescription": "Acerca de..."
 			"$action.LongDescription": "Acerca de..."
-			"$action.SmallIcon": new com.jformdesigner.model.SwingIcon( 0, "/help.png" )
+			"$action.SmallIcon": new com.jformdesigner.model.SwingIcon( 0, "/images/help.png" )
 			"$action.ActionCommandKey": "About"
 			auxiliary() {
 				"JavaCodeGenerator.className": "About"
@@ -327,14 +332,14 @@ new FormModel {
 			"location": new java.awt.Point( 185, 425 )
 		} )
 		add( new FormNonVisual( "javax.swing.AbstractAction" ) {
-			name: "actionStart"
-			"$action.Name": "Iniciar"
-			"$action.ShortDescription": "Iniciar simulación"
-			"$action.LongDescription": "Iniciar simulación"
-			"$action.SmallIcon": new com.jformdesigner.model.SwingIcon( 0, "/resultset_next.png" )
-			"$action.ActionCommandKey": "Start"
+			name: "actionStartRouter"
+			"$action.Name": "Iniciar Router"
+			"$action.ShortDescription": "Iniciar Router"
+			"$action.LongDescription": "Iniciar Router"
+			"$action.SmallIcon": new com.jformdesigner.model.SwingIcon( 0, "/images/resultset_next.png" )
+			"$action.ActionCommandKey": "StartRouter"
 			auxiliary() {
-				"JavaCodeGenerator.className": "Start"
+				"JavaCodeGenerator.className": "StartRouter"
 			}
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 270, 425 )
@@ -344,30 +349,30 @@ new FormModel {
 			"$action.ShortDescription": "Abrir archivo de rutas"
 			"$action.LongDescription": "Abrir archivo de rutas"
 			"$action.ActionCommandKey": "OpenRouteFile"
-			"$action.SmallIcon": new com.jformdesigner.model.SwingIcon( 0, "/folder_table.png" )
+			"$action.SmallIcon": new com.jformdesigner.model.SwingIcon( 0, "/images/folder_table.png" )
 			auxiliary() {
 				"JavaCodeGenerator.className": "OpenRouteFile"
 			}
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 340, 425 )
+			"location": new java.awt.Point( 380, 425 )
 		} )
 		add( new FormNonVisual( "javax.swing.AbstractAction" ) {
 			name: "actionInsertRoute"
 			"$action.ShortDescription": "Agregar Ruta"
 			"$action.LongDescription": "Agregar Ruta"
-			"$action.SmallIcon": new com.jformdesigner.model.SwingIcon( 0, "/table_row_insert.png" )
+			"$action.SmallIcon": new com.jformdesigner.model.SwingIcon( 0, "/images/table_row_insert.png" )
 			"$action.ActionCommandKey": "AddRoute"
 			auxiliary() {
 				"JavaCodeGenerator.className": "InsertRoute"
 			}
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 465, 425 )
+			"location": new java.awt.Point( 510, 425 )
 		} )
 		add( new FormNonVisual( "javax.swing.AbstractAction" ) {
 			name: "actionDelRoute"
 			"$action.ShortDescription": "Eliminar Ruta"
 			"$action.LongDescription": "Eliminar Ruta"
-			"$action.SmallIcon": new com.jformdesigner.model.SwingIcon( 0, "/table_row_delete.png" )
+			"$action.SmallIcon": new com.jformdesigner.model.SwingIcon( 0, "/images/table_row_delete.png" )
 			"$action.ActionCommandKey": "DelRoute"
 			auxiliary() {
 				"JavaCodeGenerator.className": "EliminarRuta"
@@ -379,7 +384,7 @@ new FormModel {
 			name: "actionSaveTable"
 			"$action.ShortDescription": "Guardar Tabla"
 			"$action.LongDescription": "Guardar Tabla"
-			"$action.SmallIcon": new com.jformdesigner.model.SwingIcon( 0, "/table_save.png" )
+			"$action.SmallIcon": new com.jformdesigner.model.SwingIcon( 0, "/images/table_save.png" )
 			"$action.ActionCommandKey": "SaveTable"
 			auxiliary() {
 				"JavaCodeGenerator.className": "SaveTable"
@@ -391,7 +396,7 @@ new FormModel {
 			name: "actionRefreshTable"
 			"$action.ShortDescription": "Actualizar Tabla"
 			"$action.LongDescription": "Actualizar Tabla"
-			"$action.SmallIcon": new com.jformdesigner.model.SwingIcon( 0, "/table_refresh.png" )
+			"$action.SmallIcon": new com.jformdesigner.model.SwingIcon( 0, "/images/table_refresh.png" )
 			"$action.ActionCommandKey": "RefreshTable"
 			auxiliary() {
 				"JavaCodeGenerator.className": "RefreshTable"
@@ -404,13 +409,52 @@ new FormModel {
 			"$action.Name": "Enviar mensaje"
 			"$action.ShortDescription": "Enviar mensaje"
 			"$action.LongDescription": "Enviar mensaje"
-			"$action.SmallIcon": new com.jformdesigner.model.SwingIcon( 0, "/email_go.png" )
+			"$action.SmallIcon": new com.jformdesigner.model.SwingIcon( 0, "/images/email_go.png" )
 			"$action.ActionCommandKey": "SendMsg"
 			auxiliary() {
 				"JavaCodeGenerator.className": "SendMessage"
 			}
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 310, 475 )
+		} )
+		add( new FormNonVisual( "javax.swing.AbstractAction" ) {
+			name: "actionStartForwarder"
+			"$action.Name": "Iniciar Forwarder"
+			"$action.ShortDescription": "Iniciar Forwarder"
+			"$action.LongDescription": "Iniciar Forwarder"
+			"$action.SmallIcon": new com.jformdesigner.model.SwingIcon( 0, "/images/resultset_nextfw.png" )
+			"$action.ActionCommandKey": "StartForwarder"
+			auxiliary() {
+				"JavaCodeGenerator.className": "StartForwarder"
+			}
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 529 )
+		} )
+		add( new FormNonVisual( "javax.swing.AbstractAction" ) {
+			name: "actionStopRouter"
+			"$action.Name": "Detener Router"
+			"$action.ShortDescription": "Detener Router"
+			"$action.LongDescription": "Detener Router"
+			"$action.SmallIcon": new com.jformdesigner.model.SwingIcon( 0, "/images/resultset_stop.png" )
+			"$action.ActionCommandKey": "StopRouter"
+			auxiliary() {
+				"JavaCodeGenerator.className": "StopRouter"
+			}
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 125, 530 )
+		} )
+		add( new FormNonVisual( "javax.swing.AbstractAction" ) {
+			name: "actionStopForwarder"
+			"$action.Name": "Detener Forwarder"
+			"$action.ShortDescription": "Detener Forwarder"
+			"$action.LongDescription": "Detener Forwarder"
+			"$action.SmallIcon": new com.jformdesigner.model.SwingIcon( 0, "/images/resultset_stopfw.png" )
+			"$action.ActionCommandKey": "StopForwarder"
+			auxiliary() {
+				"JavaCodeGenerator.className": "StopForwarder"
+			}
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 235, 530 )
 		} )
 	}
 }

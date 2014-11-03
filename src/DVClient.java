@@ -1,5 +1,3 @@
-package services.update.protocol;
-
 import java.io.DataOutputStream;
 import java.net.Socket;
 
@@ -23,14 +21,12 @@ public class DVClient {
                 DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
                 outToServer.writeBytes(message.toString() + '\n');
                 clientSocket.close();
-                System.out.print("*");
             } catch (Exception e) {
                 hayError = true;
-                System.out.print("X");
                 result += System.lineSeparator() + "ERROR " + t.getIp() + ": " + e.getMessage();
             }
         }
         if (!hayError) result = System.lineSeparator() + "OK. Mensaje enviado";
-        System.out.println(result);
+        Ruteador.ruteadorWindow.log(result);
     }
 }

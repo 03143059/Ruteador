@@ -1,6 +1,5 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -17,6 +16,8 @@ import javax.swing.table.*;
 public class RuteadorWindow extends JFrame {
     private final String hostAddress;
     JFileChooser fd = new JFileChooser();
+    StopRouter actionStopRouter;
+    StopForwarder actionStopForwarder;
 
     public void log(final String txt) {
         SwingUtilities.invokeLater(new Runnable(){
@@ -24,6 +25,10 @@ public class RuteadorWindow extends JFrame {
                 txtLog.append(txt);
             }
         });
+    }
+
+    public void println(final String txt) {
+        log(txt + "\n");
     }
 
     public RuteadorWindow(String hostAddress) {
@@ -36,7 +41,7 @@ public class RuteadorWindow extends JFrame {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
                 // set icon image
-                Image image = ImageIO.read(ClassLoader.getSystemResource("router.png"));
+                Image image = ImageIO.read(ClassLoader.getSystemResource("images/router.png"));
                 super.setIconImage(image);
 
                 // register font
@@ -50,6 +55,8 @@ public class RuteadorWindow extends JFrame {
             }
 
         initComponents();
+
+        setSize(new Dimension(800,600));
 
         lblSource.setText(hostAddress);
     }
@@ -67,6 +74,7 @@ public class RuteadorWindow extends JFrame {
         menuItem2 = new JMenuItem();
         toolBar1 = new JToolBar();
         button2 = new JButton();
+        button8 = new JButton();
         btnTable = new JButton();
         panelStatus = new JPanel();
         lblStatus1 = new JLabel();
@@ -97,13 +105,14 @@ public class RuteadorWindow extends JFrame {
         actionSalir = new Salir();
         actionRouteTable = new ShowRouteTable();
         actionAbout = new About();
-        actionStart = new Start();
+        actionStartRouter = new StartRouter();
         actionOpenRouteFile = new OpenRouteFile();
         actionInsertRoute = new InsertRoute();
         actionDelRoute = new EliminarRuta();
         actionSaveTable = new SaveTable();
         actionRefreshTable = new RefreshTable();
         actionSendMessage = new SendMessage();
+        actionStartForwarder = new StartForwarder();
 
         //======== this ========
         setVisible(true);
@@ -140,7 +149,7 @@ public class RuteadorWindow extends JFrame {
 
                     //---- menuItem4 ----
                     menuItem4.setText("text");
-                    menuItem4.setAction(actionStart);
+                    menuItem4.setAction(actionStartRouter);
                     menu2.add(menuItem4);
                     menu2.addSeparator();
 
@@ -169,9 +178,14 @@ public class RuteadorWindow extends JFrame {
                 toolBar1.setFloatable(false);
 
                 //---- button2 ----
-                button2.setAction(actionStart);
+                button2.setAction(actionStartRouter);
                 button2.setMnemonic('I');
                 toolBar1.add(button2);
+
+                //---- button8 ----
+                button8.setAction(actionStartForwarder);
+                button8.setMnemonic('I');
+                toolBar1.add(button8);
 
                 //---- btnTable ----
                 btnTable.setText("text");
@@ -359,6 +373,8 @@ public class RuteadorWindow extends JFrame {
         setLocationRelativeTo(null);
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
 
+        actionStopRouter = new StopRouter();
+        actionStopForwarder = new StopForwarder();
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
@@ -373,6 +389,7 @@ public class RuteadorWindow extends JFrame {
     private JMenuItem menuItem2;
     private JToolBar toolBar1;
     private JButton button2;
+    private JButton button8;
     private JButton btnTable;
     private JPanel panelStatus;
     private JLabel lblStatus1;
@@ -403,13 +420,14 @@ public class RuteadorWindow extends JFrame {
     private Salir actionSalir;
     private ShowRouteTable actionRouteTable;
     private About actionAbout;
-    private Start actionStart;
+    private StartRouter actionStartRouter;
     private OpenRouteFile actionOpenRouteFile;
     private InsertRoute actionInsertRoute;
     private EliminarRuta actionDelRoute;
     private SaveTable actionSaveTable;
     private RefreshTable actionRefreshTable;
     private SendMessage actionSendMessage;
+    private StartForwarder actionStartForwarder;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 
     private class Salir extends AbstractAction {
@@ -464,23 +482,7 @@ public class RuteadorWindow extends JFrame {
         }
     }
 
-    private class Start extends AbstractAction {
-        private Start() {
-            // JFormDesigner - Action initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
-            putValue(NAME, "Iniciar");
-            putValue(SHORT_DESCRIPTION, "Iniciar simulaci\u00f3n");
-            putValue(LONG_DESCRIPTION, "Iniciar simulaci\u00f3n");
-            putValue(SMALL_ICON, new ImageIcon(getClass().getResource("/images/resultset_next.png")));
-            putValue(ACTION_COMMAND_KEY, "Start");
-            // JFormDesigner - End of action initialization  //GEN-END:initComponents
-        }
-
-        public void actionPerformed(ActionEvent e) {
-            // TODO add your code here
-        }
-    }
-
-    private class OpenRouteFile extends AbstractAction {
+        private class OpenRouteFile extends AbstractAction {
         private OpenRouteFile() {
             // JFormDesigner - Action initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
             putValue(SHORT_DESCRIPTION, "Abrir archivo de rutas");
@@ -570,6 +572,85 @@ public class RuteadorWindow extends JFrame {
 
         public void actionPerformed(ActionEvent e) {
             // TODO add your code here
+        }
+    }
+
+    private class StartForwarder extends AbstractAction {
+        private StartForwarder() {
+            // JFormDesigner - Action initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
+            putValue(NAME, "Iniciar Forwarder");
+            putValue(SHORT_DESCRIPTION, "Iniciar Forwarder");
+            putValue(LONG_DESCRIPTION, "Iniciar Forwarder");
+            putValue(SMALL_ICON, new ImageIcon(getClass().getResource("/images/resultset_nextfw.png")));
+            putValue(ACTION_COMMAND_KEY, "StartForwarder");
+            // JFormDesigner - End of action initialization  //GEN-END:initComponents
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            // Start forwarder thread
+            (new Thread() {
+                public void run() {
+                    Forwarder.start(Ruteador.address, Ruteador.FORWARD_PORT); // iniciar servidor de mensajes
+                }
+            }).start();
+
+            button8.setAction(actionStopForwarder);
+        }
+    }
+
+    private class StartRouter extends AbstractAction {
+        private StartRouter() {
+            // JFormDesigner - Action initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
+            putValue(NAME, "Iniciar Router");
+            putValue(SHORT_DESCRIPTION, "Iniciar Router");
+            putValue(LONG_DESCRIPTION, "Iniciar Router");
+            putValue(SMALL_ICON, new ImageIcon(getClass().getResource("/images/resultset_next.png")));
+            putValue(ACTION_COMMAND_KEY, "StartRouter");
+            // JFormDesigner - End of action initialization  //GEN-END:initComponents
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            // Start Distance vector server thread
+            (new Thread() {
+                public void run() {
+                    DVServer.start(Ruteador.address, Ruteador.UPDATE_PORT); // iniciar servidor de mensajes
+                }
+            }).start();
+            button2.setAction(actionStopRouter);
+        }
+    }
+
+    private class StopRouter extends AbstractAction {
+        private StopRouter() {
+            // JFormDesigner - Action initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
+            putValue(NAME, "Detener Router");
+            putValue(SHORT_DESCRIPTION, "Detener Router");
+            putValue(LONG_DESCRIPTION, "Detener Router");
+            putValue(SMALL_ICON, new ImageIcon(getClass().getResource("/images/resultset_stop.png")));
+            putValue(ACTION_COMMAND_KEY, "StopRouter");
+            // JFormDesigner - End of action initialization  //GEN-END:initComponents
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            DVServer.stop();
+            button2.setAction(actionStartRouter);
+        }
+    }
+
+    private class StopForwarder extends AbstractAction {
+        private StopForwarder() {
+            // JFormDesigner - Action initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
+            putValue(NAME, "Detener Forwarder");
+            putValue(SHORT_DESCRIPTION, "Detener Forwarder");
+            putValue(LONG_DESCRIPTION, "Detener Forwarder");
+            putValue(SMALL_ICON, new ImageIcon(getClass().getResource("/images/resultset_stopfw.png")));
+            putValue(ACTION_COMMAND_KEY, "StopForwarder");
+            // JFormDesigner - End of action initialization  //GEN-END:initComponents
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            Forwarder.stop();
+            button8.setAction(actionStartForwarder);
         }
     }
 }

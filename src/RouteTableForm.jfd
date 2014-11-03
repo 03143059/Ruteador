@@ -70,7 +70,7 @@ new FormModel {
 			"$action.ShortDescription": "Abrir archivo de rutas"
 			"$action.LongDescription": "Abrir archivo de rutas"
 			"$action.ActionCommandKey": "OpenRouteFile"
-			"$action.SmallIcon": new com.jformdesigner.model.SwingIcon( 0, "/folder_table.png" )
+			"$action.SmallIcon": new com.jformdesigner.model.SwingIcon( 0, "/images/folder_table.png" )
 			auxiliary() {
 				"JavaCodeGenerator.className": "OpenRouteFile"
 			}

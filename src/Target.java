@@ -1,5 +1,3 @@
-package services.update.protocol;
-
 public class Target {
     private String ip;
     private int dv;
