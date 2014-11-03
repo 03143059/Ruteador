@@ -343,7 +343,7 @@ public class RuteadorWindow extends JFrame {
                                 {null, null, null, null},
                             },
                             new String[] {
-                                "#", "Host", "IP", "Estado"
+                                "#", "Host", "IP", "DV"
                             }
                         ));
                         scrollPane3.setViewportView(table1);
@@ -420,7 +420,7 @@ public class RuteadorWindow extends JFrame {
             putValue(LONG_DESCRIPTION, "Salir el programa");
             putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F4, KeyEvent.ALT_MASK));
             putValue(ACTION_COMMAND_KEY, "Salir");
-            putValue(SMALL_ICON, new ImageIcon(getClass().getResource("/exclamation.png")));
+            putValue(SMALL_ICON, new ImageIcon(getClass().getResource("/images/exclamation.png")));
             // JFormDesigner - End of action initialization  //GEN-END:initComponents
         }
 
@@ -435,7 +435,7 @@ public class RuteadorWindow extends JFrame {
             putValue(NAME, "Tabla de Ruteo");
             putValue(SHORT_DESCRIPTION, "Mostrar Tabla de Ruteo");
             putValue(LONG_DESCRIPTION, "Mostrar Tabla de Ruteo");
-            putValue(SMALL_ICON, new ImageIcon(getClass().getResource("/table.png")));
+            putValue(SMALL_ICON, new ImageIcon(getClass().getResource("/images/table.png")));
             putValue(ACTION_COMMAND_KEY, "RouteTable");
             // JFormDesigner - End of action initialization  //GEN-END:initComponents
         }
@@ -454,7 +454,7 @@ public class RuteadorWindow extends JFrame {
             putValue(NAME, "Acerca de...");
             putValue(SHORT_DESCRIPTION, "Acerca de...");
             putValue(LONG_DESCRIPTION, "Acerca de...");
-            putValue(SMALL_ICON, new ImageIcon(getClass().getResource("/help.png")));
+            putValue(SMALL_ICON, new ImageIcon(getClass().getResource("/images/help.png")));
             putValue(ACTION_COMMAND_KEY, "About");
             // JFormDesigner - End of action initialization  //GEN-END:initComponents
         }
@@ -470,7 +470,7 @@ public class RuteadorWindow extends JFrame {
             putValue(NAME, "Iniciar");
             putValue(SHORT_DESCRIPTION, "Iniciar simulaci\u00f3n");
             putValue(LONG_DESCRIPTION, "Iniciar simulaci\u00f3n");
-            putValue(SMALL_ICON, new ImageIcon(getClass().getResource("/resultset_next.png")));
+            putValue(SMALL_ICON, new ImageIcon(getClass().getResource("/images/resultset_next.png")));
             putValue(ACTION_COMMAND_KEY, "Start");
             // JFormDesigner - End of action initialization  //GEN-END:initComponents
         }
@@ -486,7 +486,7 @@ public class RuteadorWindow extends JFrame {
             putValue(SHORT_DESCRIPTION, "Abrir archivo de rutas");
             putValue(LONG_DESCRIPTION, "Abrir archivo de rutas");
             putValue(ACTION_COMMAND_KEY, "OpenRouteFile");
-            putValue(SMALL_ICON, new ImageIcon(getClass().getResource("/folder_table.png")));
+            putValue(SMALL_ICON, new ImageIcon(getClass().getResource("/images/folder_table.png")));
             // JFormDesigner - End of action initialization  //GEN-END:initComponents
         }
 
@@ -502,7 +502,7 @@ public class RuteadorWindow extends JFrame {
             // JFormDesigner - Action initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
             putValue(SHORT_DESCRIPTION, "Agregar Ruta");
             putValue(LONG_DESCRIPTION, "Agregar Ruta");
-            putValue(SMALL_ICON, new ImageIcon(getClass().getResource("/table_row_insert.png")));
+            putValue(SMALL_ICON, new ImageIcon(getClass().getResource("/images/table_row_insert.png")));
             putValue(ACTION_COMMAND_KEY, "AddRoute");
             // JFormDesigner - End of action initialization  //GEN-END:initComponents
         }
@@ -517,7 +517,7 @@ public class RuteadorWindow extends JFrame {
             // JFormDesigner - Action initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
             putValue(SHORT_DESCRIPTION, "Eliminar Ruta");
             putValue(LONG_DESCRIPTION, "Eliminar Ruta");
-            putValue(SMALL_ICON, new ImageIcon(getClass().getResource("/table_row_delete.png")));
+            putValue(SMALL_ICON, new ImageIcon(getClass().getResource("/images/table_row_delete.png")));
             putValue(ACTION_COMMAND_KEY, "DelRoute");
             // JFormDesigner - End of action initialization  //GEN-END:initComponents
         }
@@ -532,7 +532,7 @@ public class RuteadorWindow extends JFrame {
             // JFormDesigner - Action initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
             putValue(SHORT_DESCRIPTION, "Guardar Tabla");
             putValue(LONG_DESCRIPTION, "Guardar Tabla");
-            putValue(SMALL_ICON, new ImageIcon(getClass().getResource("/table_save.png")));
+            putValue(SMALL_ICON, new ImageIcon(getClass().getResource("/images/table_save.png")));
             putValue(ACTION_COMMAND_KEY, "SaveTable");
             // JFormDesigner - End of action initialization  //GEN-END:initComponents
         }
@@ -547,7 +547,7 @@ public class RuteadorWindow extends JFrame {
             // JFormDesigner - Action initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
             putValue(SHORT_DESCRIPTION, "Actualizar Tabla");
             putValue(LONG_DESCRIPTION, "Actualizar Tabla");
-            putValue(SMALL_ICON, new ImageIcon(getClass().getResource("/table_refresh.png")));
+            putValue(SMALL_ICON, new ImageIcon(getClass().getResource("/images/table_refresh.png")));
             putValue(ACTION_COMMAND_KEY, "RefreshTable");
             // JFormDesigner - End of action initialization  //GEN-END:initComponents
         }
@@ -563,7 +563,7 @@ public class RuteadorWindow extends JFrame {
             putValue(NAME, "Enviar mensaje");
             putValue(SHORT_DESCRIPTION, "Enviar mensaje");
             putValue(LONG_DESCRIPTION, "Enviar mensaje");
-            putValue(SMALL_ICON, new ImageIcon(getClass().getResource("/email_go.png")));
+            putValue(SMALL_ICON, new ImageIcon(getClass().getResource("/images/email_go.png")));
             putValue(ACTION_COMMAND_KEY, "SendMsg");
             // JFormDesigner - End of action initialization  //GEN-END:initComponents
         }
