@@ -1,5 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -18,6 +20,7 @@ public class RuteadorWindow extends JFrame {
     JFileChooser fd = new JFileChooser();
     StopRouter actionStopRouter;
     StopForwarder actionStopForwarder;
+    ScheduledThreadPoolExecutor exec;
 
     public void log(final String txt) {
         SwingUtilities.invokeLater(new Runnable(){
@@ -59,6 +62,21 @@ public class RuteadorWindow extends JFrame {
         setSize(new Dimension(800,600));
 
         lblSource.setText(hostAddress);
+
+        exec = new ScheduledThreadPoolExecutor(1);
+
+        println("CONSOLA DE MENSAJES");
+        println("-------------------");
+        println("");
+
+        exec.schedule(new Runnable() {
+            public void run() {
+                JOptionPane.showMessageDialog(null,
+                        "Antes de iniciar los servicios debe cargar una tabla de rutas",
+                        "Aviso", JOptionPane.WARNING_MESSAGE);
+            }
+        }, 1, TimeUnit.SECONDS);
+
     }
 
     private void initComponents() {
@@ -69,6 +87,7 @@ public class RuteadorWindow extends JFrame {
         menuItem1 = new JMenuItem();
         menu2 = new JMenu();
         menuItem4 = new JMenuItem();
+        menuItem5 = new JMenuItem();
         menuItem3 = new JMenuItem();
         menu3 = new JMenu();
         menuItem2 = new JMenuItem();
@@ -151,6 +170,11 @@ public class RuteadorWindow extends JFrame {
                     menuItem4.setText("text");
                     menuItem4.setAction(actionStartRouter);
                     menu2.add(menuItem4);
+
+                    //---- menuItem5 ----
+                    menuItem5.setText("text");
+                    menuItem5.setAction(actionStartForwarder);
+                    menu2.add(menuItem5);
                     menu2.addSeparator();
 
                     //---- menuItem3 ----
@@ -384,6 +408,7 @@ public class RuteadorWindow extends JFrame {
     private JMenuItem menuItem1;
     private JMenu menu2;
     private JMenuItem menuItem4;
+    private JMenuItem menuItem5;
     private JMenuItem menuItem3;
     private JMenu menu3;
     private JMenuItem menuItem2;
@@ -478,7 +503,13 @@ public class RuteadorWindow extends JFrame {
         }
 
         public void actionPerformed(ActionEvent e) {
-            // TODO add your code here
+            JOptionPane.showMessageDialog(null,
+                    "CC8 - Implementando un Router\n" +
+                    "Integrantes de grupo:\n" +
+                    "Werner Garcia\n"+
+                    "Asdrubal Batz\n"+
+                    "Jose Vasquez",
+                    "Acerca de...", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -494,7 +525,8 @@ public class RuteadorWindow extends JFrame {
 
         public void actionPerformed(ActionEvent e) {
             if (fd.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-
+                actionStartRouter.setEnabled(true);
+                actionStartForwarder.setEnabled(true);
             }
         }
     }
@@ -583,18 +615,31 @@ public class RuteadorWindow extends JFrame {
             putValue(LONG_DESCRIPTION, "Iniciar Forwarder");
             putValue(SMALL_ICON, new ImageIcon(getClass().getResource("/images/resultset_nextfw.png")));
             putValue(ACTION_COMMAND_KEY, "StartForwarder");
+            setEnabled(false);
             // JFormDesigner - End of action initialization  //GEN-END:initComponents
         }
 
         public void actionPerformed(ActionEvent e) {
             // Start forwarder thread
-            (new Thread() {
-                public void run() {
-                    Forwarder.start(Ruteador.address, Ruteador.FORWARD_PORT); // iniciar servidor de mensajes
-                }
-            }).start();
+//            (new Thread() {
+//                public void run() {
+//
+//                }
+//            }).start();
 
-            button8.setAction(actionStopForwarder);
+            actionStartForwarder.setEnabled(false);
+            Forwarder.start(Ruteador.address, Ruteador.FORWARD_PORT); // iniciar servidor de mensajes
+
+            exec.schedule(new Runnable() {
+                public void run() {
+                    if (Forwarder.isServerRunning()) {
+                        button8.setAction(actionStopForwarder);
+                        menuItem5.setAction(actionStopForwarder);
+                    }
+                    actionStartForwarder.setEnabled(true);
+                }
+            }, 1, TimeUnit.SECONDS);
+
         }
     }
 
@@ -606,17 +651,32 @@ public class RuteadorWindow extends JFrame {
             putValue(LONG_DESCRIPTION, "Iniciar Router");
             putValue(SMALL_ICON, new ImageIcon(getClass().getResource("/images/resultset_next.png")));
             putValue(ACTION_COMMAND_KEY, "StartRouter");
+            setEnabled(false);
             // JFormDesigner - End of action initialization  //GEN-END:initComponents
         }
 
         public void actionPerformed(ActionEvent e) {
             // Start Distance vector server thread
-            (new Thread() {
+//            (new Thread() {
+//                public void run() {
+//
+//                }
+//            }).start();
+
+            actionStartRouter.setEnabled(false);
+            DVServer.start(Ruteador.address, Ruteador.UPDATE_PORT); // iniciar servidor de mensajes
+
+            exec.schedule(new Runnable() {
                 public void run() {
-                    DVServer.start(Ruteador.address, Ruteador.UPDATE_PORT); // iniciar servidor de mensajes
+                    if (DVServer.isServerRunning()) {
+                        button2.setAction(actionStopRouter);
+                        menuItem4.setAction(actionStopRouter);
+                    }
+                    actionStartRouter.setEnabled(true);
                 }
-            }).start();
-            button2.setAction(actionStopRouter);
+            }, 1, TimeUnit.SECONDS);
+
+
         }
     }
 
@@ -634,6 +694,7 @@ public class RuteadorWindow extends JFrame {
         public void actionPerformed(ActionEvent e) {
             DVServer.stop();
             button2.setAction(actionStartRouter);
+            menuItem4.setAction(actionStartRouter);
         }
     }
 
@@ -651,6 +712,7 @@ public class RuteadorWindow extends JFrame {
         public void actionPerformed(ActionEvent e) {
             Forwarder.stop();
             button8.setAction(actionStartForwarder);
+            menuItem5.setAction(actionStartForwarder);
         }
     }
 }
