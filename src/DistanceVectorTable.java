@@ -9,33 +9,31 @@ import java.util.HashMap;
 // [0] = name of adjacent gate
 // [1] = cost to send
 public class DistanceVectorTable {
-    private HashMap<String,String[]> distanceVectorRoutes = new HashMap<String, String[]>();
+    private HashMap<String,Target> distanceVectorRoutes = new HashMap<String, Target>();
     private HashMap<String,String> adjacent = new HashMap<String, String>();
 
     //Methods to set, delete and get distanceVectorRoutes
     //Method isFaster used to compare if the new cost is faster than old
 
-    public void setRoute(String peerName, String adjacentName, String peerCost){
-        String[] distanceVectorArray = {adjacentName, peerCost};
-        distanceVectorRoutes.put(peerName,distanceVectorArray);
+    public void setRoute(String peerName, Target values){
+        distanceVectorRoutes.put(peerName,values);
     }
 
     public void deleteRoute(String peerName){
         distanceVectorRoutes.remove(peerName);
     }
 
-    public String getRouteCost(String peerName){
-        return(distanceVectorRoutes.get(peerName)[1]);
+    public int getRouteCost(String peerName){
+        return(distanceVectorRoutes.get(peerName).getDv());
     }
 
     public String getRouteGate(String peerName){
-        return (distanceVectorRoutes.get(peerName)[0]);
+        return (distanceVectorRoutes.get(peerName).getGate());
     }
 
     public boolean isFaster(String peerName, int cost){
         if(distanceVectorRoutes.containsKey(peerName)){
-            String costTemp = distanceVectorRoutes.get(peerName)[1];
-            int costToSend = Integer.parseInt(costTemp);
+            int costToSend = distanceVectorRoutes.get(peerName).getDv();
             if(costToSend < cost){
                 return true;
             } else {

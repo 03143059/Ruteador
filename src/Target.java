@@ -1,14 +1,14 @@
 public class Target {
-    private String ip;
+    private String gate;
     private int dv;
 
-    public Target(String ip, int dv) {
-        this.ip = ip;
+    public Target(String gate, int dv) {
+        this.gate = gate;
         this.dv = dv;
     }
 
-    public String getIp() {
-        return ip;
+    public String getGate() {
+        return gate;
     }
 
     public int getDv() {
@@ -17,7 +17,7 @@ public class Target {
 
     @Override
     public String toString() {
-        return ip + ":" + dv;
+        return gate + ":" + dv;
     }
 
 }

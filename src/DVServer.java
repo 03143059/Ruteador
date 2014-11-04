@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
@@ -17,6 +18,7 @@ import java.util.concurrent.Executors;
  */
 public class DVServer implements Runnable {
     //instance variables
+    protected DistanceVectorTable tableOfDistance = new DistanceVectorTable();
     static DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     protected int serverPort;
     protected ServerSocket serverSocket = null;
@@ -81,7 +83,7 @@ public class DVServer implements Runnable {
                         "Error accepting client connection", e);
             }
             this.threadPool.execute(
-                    new WorkerRunnable(clientSocket));
+                    new WorkerRunnable(clientSocket,tableOfDistance));
         }
         this.threadPool.shutdown();
         Ruteador.ruteadorWindow.println("Router detenido.");
@@ -107,8 +109,10 @@ public class DVServer implements Runnable {
 class WorkerRunnable implements Runnable {
 
     protected Socket connect = null;
+    protected DistanceVectorTable tableOfDistance = null;
 
-    public WorkerRunnable(Socket clientSocket) {
+    public WorkerRunnable(Socket clientSocket, DistanceVectorTable distanceTable) {
+        this.tableOfDistance = distanceTable;
         this.connect = clientSocket;
         Ruteador.ruteadorWindow.println("Connection opened from: " +
                 connect.getRemoteSocketAddress() + " (" + DVServer.df.format(new Date()) + ")");
@@ -123,25 +127,58 @@ class WorkerRunnable implements Runnable {
             //get character input stream from client
             in = new BufferedReader(new InputStreamReader(connect.getInputStream()));
 
-            //get first line of request from client
-            String input = in.readLine();
-            if (input == null || !input.equals("Type:DV")) throw new Exception("Invalid request");
-            input = in.readLine(); // get next line: Len:#
-            //create StringTokenizer to parse request
-            StringTokenizer parse = new StringTokenizer(input, ":");
-            parse.nextToken(); // ignore Len
-            //parse out length
-            int len = Integer.parseInt(parse.nextToken());
-            Ruteador.ruteadorWindow.println("Expecting " + len + " targets");
-            for (int i = 1; i <= len; i++) {
-                //get first line of request from client
-                input = in.readLine();
-                if (input == null) throw new Exception("Invalid request");
-                parse = new StringTokenizer(input, ":");
-                String ip = parse.nextToken();
-                int dv = Integer.parseInt(parse.nextToken());
-                Target t = new Target(ip, dv);
-                Ruteador.ruteadorWindow.println("Received target #" + i + ": " + t);
+            //get From:<Name Router>
+            String nameRouterComplete = in.readLine();
+            //tokenizer From
+            StringTokenizer parseNameRouter = new StringTokenizer(nameRouterComplete,":");
+            //ignore "From"
+            parseNameRouter.nextToken();
+            //get name of Router
+            String nameRouter = parseNameRouter.nextToken();
+
+            //get "Type:<type>"
+            String typeMessageComplete = in.readLine();
+            //tokenizer Type
+            StringTokenizer parseTypeMessage = new StringTokenizer(typeMessageComplete,":");
+            //ignore "Type"
+            parseTypeMessage.nextToken();
+            //get type of message
+            String typeMessage = parseTypeMessage.nextToken();
+
+            if(typeMessage.equals("HELLO")){
+
+                String message = "From:" + "name" + System.lineSeparator() + "Type:WELCOME\n";
+                DataOutputStream outToClient = new DataOutputStream(connect.getOutputStream());
+                outToClient.writeBytes(message + '\n');
+
+            } else if(typeMessage.equals("DV")) {
+
+                //get "Len:<leb>"
+                String lengthOfMessage = in.readLine();
+                //tokenizer Type
+                StringTokenizer parseLengthMessage = new StringTokenizer(lengthOfMessage,":");
+                //ignore "Type"
+                parseLengthMessage.nextToken();
+                //get type of message
+                int len = Integer.parseInt(parseTypeMessage.nextToken());
+                //for to save distanceVectorTable
+                for (int i = 1; i <= len; i++) {
+                    //get first line of request from client
+                    String input = in.readLine();
+                    if (input == null) throw new Exception("Invalid request");
+                    StringTokenizer parse = new StringTokenizer(input, ":");
+                    String peerName = parse.nextToken();
+                    int dv = Integer.parseInt(parse.nextToken());
+                    Target t = new Target(nameRouter, dv);
+                    if(tableOfDistance.isFaster(peerName,dv)){
+                        tableOfDistance.deleteRoute(peerName);
+                        tableOfDistance.setRoute(peerName,t);
+                    }
+                    Ruteador.ruteadorWindow.println("Received target #" + i + ": " + t);
+                }
+
+            } else {
+                Ruteador.ruteadorWindow.println("Invalid type of message");
             }
         } catch (SocketTimeoutException ste) {
             Ruteador.ruteadorWindow.println("Connection timeout");
