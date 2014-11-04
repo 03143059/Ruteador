@@ -16,10 +16,6 @@ import java.util.concurrent.Executors;
  * Created by Werner on 10/15/2014.
  */
 public class DVServer implements Runnable {
-
-    //static variables
-    // static boolean verbose = true;
-
     //instance variables
     static DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     protected int serverPort;
@@ -29,12 +25,22 @@ public class DVServer implements Runnable {
     protected ExecutorService threadPool = Executors.newFixedThreadPool(10);
     protected InetAddress address;
 
-    //constructor
-//    public DVServer(Socket connect) {
-//        this.connect = connect;
-//        Ruteador.ruteadorWindow.println("Connection opened from: " +
-//                connect.getRemoteSocketAddress() + " (" + df.format(new Date()) + ")");
-//    }
+    static DVServer server = null;
+
+    public static boolean isServerRunning(){
+        return server != null && server.isRunning;
+    }
+
+    public static void stop() {
+        server.stopServer();
+        server = null;
+    }
+
+    public static void start(InetAddress address, int port) {
+        Ruteador.ruteadorWindow.println("Router iniciado en " + address.getHostAddress() + ":" + port);
+        server = new DVServer(address, port);
+        new Thread(server).start();
+    }
 
     public DVServer(InetAddress address, int port) {
         this.serverPort = port;
@@ -44,10 +50,17 @@ public class DVServer implements Runnable {
     private void openServerSocket() {
         try {
             this.serverSocket = new ServerSocket(this.serverPort, 0, address);
+            isRunning = true;
         } catch (IOException e) {
+            isRunning = false;
+            this.serverSocket = null;
+            isStopped = true;
+            Ruteador.ruteadorWindow.println("Router detenido.");
             throw new RuntimeException("Cannot open port " + this.serverPort, e);
         }
     }
+
+    protected boolean isRunning = false;
 
     @Override
     public void run() {
@@ -61,7 +74,7 @@ public class DVServer implements Runnable {
                 clientSocket = this.serverSocket.accept();
             } catch (IOException e) {
                 if (isStopped()) {
-                    Ruteador.ruteadorWindow.println("Server Stopped.");
+                    Ruteador.ruteadorWindow.println("Router detenido.");
                     return;
                 }
                 throw new RuntimeException(
@@ -71,7 +84,7 @@ public class DVServer implements Runnable {
                     new WorkerRunnable(clientSocket));
         }
         this.threadPool.shutdown();
-        Ruteador.ruteadorWindow.println("Server Stopped.");
+        Ruteador.ruteadorWindow.println("Router detenido.");
     }
 
 
@@ -86,20 +99,6 @@ public class DVServer implements Runnable {
         } catch (IOException e) {
             throw new RuntimeException("Error closing server", e);
         }
-    }
-
-    static DVServer server;
-
-    public static void stop() {
-        server.stopServer();
-        server = null;
-    }
-
-    public static void start(InetAddress address, int port) {
-        Ruteador.ruteadorWindow.println("Listenning for connections on " + address + ":" + port);
-        server = new DVServer(address, port);
-        new Thread(server).start();
-
     }
 
 }

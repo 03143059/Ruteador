@@ -38,6 +38,11 @@ new FormModel {
 							"text": "text"
 							"action": new FormReference( "actionStartRouter" )
 						} )
+						add( new FormComponent( "javax.swing.JMenuItem" ) {
+							name: "menuItem5"
+							"text": "text"
+							"action": new FormReference( "actionStartForwarder" )
+						} )
 						add( new FormComponent( "javax.swing.JPopupMenu$Separator" ) {
 							name: "separator1"
 						} )
@@ -338,11 +343,12 @@ new FormModel {
 			"$action.LongDescription": "Iniciar Router"
 			"$action.SmallIcon": new com.jformdesigner.model.SwingIcon( 0, "/images/resultset_next.png" )
 			"$action.ActionCommandKey": "StartRouter"
+			"enabled": false
 			auxiliary() {
 				"JavaCodeGenerator.className": "StartRouter"
 			}
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 270, 425 )
+			"location": new java.awt.Point( 5, 525 )
 		} )
 		add( new FormNonVisual( "javax.swing.AbstractAction" ) {
 			name: "actionOpenRouteFile"
@@ -354,7 +360,7 @@ new FormModel {
 				"JavaCodeGenerator.className": "OpenRouteFile"
 			}
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 380, 425 )
+			"location": new java.awt.Point( 265, 425 )
 		} )
 		add( new FormNonVisual( "javax.swing.AbstractAction" ) {
 			name: "actionInsertRoute"
@@ -366,7 +372,7 @@ new FormModel {
 				"JavaCodeGenerator.className": "InsertRoute"
 			}
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 510, 425 )
+			"location": new java.awt.Point( 390, 425 )
 		} )
 		add( new FormNonVisual( "javax.swing.AbstractAction" ) {
 			name: "actionDelRoute"
@@ -424,11 +430,12 @@ new FormModel {
 			"$action.LongDescription": "Iniciar Forwarder"
 			"$action.SmallIcon": new com.jformdesigner.model.SwingIcon( 0, "/images/resultset_nextfw.png" )
 			"$action.ActionCommandKey": "StartForwarder"
+			"enabled": false
 			auxiliary() {
 				"JavaCodeGenerator.className": "StartForwarder"
 			}
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 0, 529 )
+			"location": new java.awt.Point( 215, 525 )
 		} )
 		add( new FormNonVisual( "javax.swing.AbstractAction" ) {
 			name: "actionStopRouter"
@@ -441,7 +448,7 @@ new FormModel {
 				"JavaCodeGenerator.className": "StopRouter"
 			}
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 125, 530 )
+			"location": new java.awt.Point( 110, 525 )
 		} )
 		add( new FormNonVisual( "javax.swing.AbstractAction" ) {
 			name: "actionStopForwarder"
@@ -454,7 +461,7 @@ new FormModel {
 				"JavaCodeGenerator.className": "StopForwarder"
 			}
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 235, 530 )
+			"location": new java.awt.Point( 340, 525 )
 		} )
 	}
 }

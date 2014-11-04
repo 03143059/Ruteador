@@ -24,7 +24,11 @@ public class Forwarder implements Runnable {
     protected ExecutorService threadPool = Executors.newFixedThreadPool(10);
     protected InetAddress address;
 
-    static Forwarder server;
+    static Forwarder server = null;
+
+    public static boolean isServerRunning(){
+        return server != null && server.isRunning;
+    }
 
     public static void stop() {
         server.stopServer();
@@ -32,10 +36,9 @@ public class Forwarder implements Runnable {
     }
 
     public static void start(InetAddress address, int port) {
-        Ruteador.ruteadorWindow.println("Listenning for connections on " + address + ":" + port);
+        Ruteador.ruteadorWindow.println("Forwarder iniciado en " + address.getHostAddress() + ":" + port);
         server = new Forwarder(address, port);
         new Thread(server).start();
-
     }
 
     public Forwarder(InetAddress address, int port) {
@@ -43,10 +46,17 @@ public class Forwarder implements Runnable {
         this.address = address;
     }
 
+    protected boolean isRunning = false;
+
     private void openServerSocket() {
         try {
             this.serverSocket = new ServerSocket(this.serverPort, 0, address);
+            isRunning = true;
         } catch (IOException e) {
+            isRunning = false;
+            this.serverSocket = null;
+            isStopped = true;
+            Ruteador.ruteadorWindow.println("Router detenido.");
             throw new RuntimeException("Cannot open port " + serverPort, e);
         }
     }
@@ -62,7 +72,7 @@ public class Forwarder implements Runnable {
                 clientSocket = this.serverSocket.accept();
             } catch (IOException e) {
                 if (isStopped()) {
-                    Ruteador.ruteadorWindow.println("Server Stopped.");
+                    Ruteador.ruteadorWindow.println("Forwarder detenido.");
                     return;
                 }
                 throw new RuntimeException(
@@ -73,7 +83,7 @@ public class Forwarder implements Runnable {
                             "Thread Pooled Server"));
         }
         this.threadPool.shutdown();
-        Ruteador.ruteadorWindow.println("Server Stopped.");
+        Ruteador.ruteadorWindow.println("Forwarder detenido.");
     }
 
 
